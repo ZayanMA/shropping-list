@@ -88,7 +88,7 @@ def test_shop_complete_moves_list_to_history(admin):
     admin.post("/api/items", json={"name": "Saffron"})
     admin.patch(f"/api/items/{bought['id']}", json={"checked": True})
 
-    r = admin.post("/api/list/complete", json={"list_id": list_id, "carry_over_unchecked": True})
+    r = admin.post("/api/list/complete", json={"list_id": list_id})
     assert r.json()["carried_over"] == 1
 
     new = admin.get("/api/list").json()
@@ -103,6 +103,20 @@ def test_shop_complete_moves_list_to_history(admin):
 
     # Items on a completed list can't be edited any more.
     assert admin.patch(f"/api/items/{bought['id']}", json={"checked": False}).status_code == 404
+
+
+def test_shop_complete_mark_all_bought(admin):
+    list_id = admin.get("/api/list").json()["id"]
+    admin.post("/api/items", json={"name": "Eggs"})
+    admin.post("/api/items", json={"name": "Saffron"})
+
+    r = admin.post("/api/list/complete", json={"list_id": list_id, "mark_all_bought": True})
+    assert r.json()["carried_over"] == 0
+    assert admin.get("/api/list").json()["items"] == []
+
+    detail = admin.get(f"/api/history/{list_id}").json()
+    assert all(i["checked"] and i["checked_by"] == "Alex" for i in detail["items"])
+    assert admin.get("/api/history").json()[0]["bought_count"] == 2
 
 
 def test_double_complete_is_rejected(admin):

@@ -189,13 +189,14 @@ async function removeItem(id) {
 async function completeShop() {
   const dialog = $("#complete-dialog");
   dialog.returnValue = "";
+  $("#mark-all").checked = false;
   dialog.showModal();
   dialog.addEventListener("close", async () => {
     if (dialog.returnValue !== "ok") return;
     try {
       await api("POST", "/api/list/complete", {
         list_id: state.list.id,
-        carry_over_unchecked: $("#carry-over").checked,
+        mark_all_bought: $("#mark-all").checked,
       });
     } catch (err) {
       $("#list-error").textContent = err.message;

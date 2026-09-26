@@ -9,7 +9,7 @@ Everyone in the house gets their own login, adds things to one shared list, and 
 - **One shared list** for the whole household, refreshed on everyone's device every few seconds
 - **Items with a count**: type "eggs" with 12. Adding something that's already on the list bumps its count instead of duplicating it
 - **Separate accounts** so you can see who added each item and who ticked it off
-- **Shop complete** saves the list to history and starts a new one, optionally carrying over anything you didn't get
+- **Shop complete** saves the list to history and starts a new one. Anything not ticked off moves to the next shop automatically, or tick "Mark all items as completed" to count everything as bought
 - **History** of every past shop: what was bought, what wasn't, and who did the shop
 - **Household admin**: add members, reset passwords, disable accounts. No public sign-up
 - Works nicely on phones and can be added to your home screen

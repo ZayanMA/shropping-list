@@ -137,7 +137,7 @@ class UpdateItemIn(Stripped):
 
 class CompleteIn(BaseModel):
     list_id: int
-    carry_over_unchecked: bool = True
+    mark_all_bought: bool = False
 
 
 # ---------- helpers ----------
@@ -359,6 +359,9 @@ def delete_item(item_id: int, user: User, conn: Conn):
 def complete_shop(body: CompleteIn, user: User, conn: Conn):
     """Close the current list, save it to history and start a fresh one.
 
+    With `mark_all_bought`, every remaining item is ticked off as bought by this user.
+    Otherwise anything not ticked is moved onto the new list for the next shop.
+
     `list_id` must be the list the client is looking at, so two people pressing
     "Shop complete" at the same time can't close the new, empty list by accident.
     """
@@ -366,13 +369,20 @@ def complete_shop(body: CompleteIn, user: User, conn: Conn):
         current = db.ensure_open_list(conn)
         if body.list_id != current:
             raise HTTPException(409, "This list was already completed by someone else")
+        completed_at = db.now()
         conn.execute(
             "UPDATE lists SET completed_at = ?, completed_by = ? WHERE id = ?",
-            (db.now(), user["id"], current),
+            (completed_at, user["id"], current),
         )
         new_id = db.ensure_open_list(conn)
         carried = 0
-        if body.carry_over_unchecked:
+        if body.mark_all_bought:
+            conn.execute(
+                """UPDATE items SET checked = 1, checked_by = ?, checked_at = ?
+                   WHERE list_id = ? AND checked = 0""",
+                (user["id"], completed_at, current),
+            )
+        else:
             carried = conn.execute(
                 """INSERT INTO items (list_id, name, quantity, added_by, added_at)
                    SELECT ?, name, quantity, added_by, added_at FROM items
