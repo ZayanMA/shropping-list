@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2f7d4f">
+  <title>Shropping List</title>
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1><img src="/static/icon.svg" alt=""> Shropping List</h1>
+    <span id="whoami" class="muted"></span>
+  </header>
+
+  <main>
+    <!-- First run: create the admin account -->
+    <section id="view-setup" class="view card" hidden>
+      <h2>Welcome</h2>
+      <p class="muted">Create the first account. You'll be the household admin and can add everyone else.</p>
+      <form id="setup-form" class="stack">
+        <label>Your name <input name="display_name" required maxlength="40" autocomplete="name"></label>
+        <label>Username <input name="username" required minlength="2" maxlength="32" pattern="[A-Za-z0-9_.\-]+" autocomplete="username"></label>
+        <label>Password <input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+        <button class="primary">Create admin account</button>
+        <p class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="view-login" class="view card" hidden>
+      <h2>Sign in</h2>
+      <form id="login-form" class="stack">
+        <label>Username <input name="username" required autocomplete="username" autocapitalize="none"></label>
+        <label>Password <input name="password" type="password" required autocomplete="current-password"></label>
+        <button class="primary">Sign in</button>
+        <p class="error" role="alert"></p>
+      </form>
+      <p class="muted small">No account? Ask whoever runs the server to add you.</p>
+    </section>
+
+    <section id="view-list" class="view" hidden>
+      <form id="add-form" class="add-row card">
+        <input name="name" placeholder="Add an item, e.g. eggs" required maxlength="100" autocomplete="off" aria-label="Item">
+        <input name="quantity" type="number" min="1" max="999" value="1" inputmode="numeric" aria-label="Quantity">
+        <button class="primary" aria-label="Add">Add</button>
+      </form>
+      <p class="error" id="list-error" role="alert"></p>
+
+      <ul id="items" class="items"></ul>
+      <p id="empty" class="empty muted" hidden>The list is empty. Add something above.</p>
+
+      <div id="complete-bar" class="complete-bar" hidden>
+        <span id="progress" class="muted"></span>
+        <button id="complete-btn" class="primary">Shop complete</button>
+      </div>
+    </section>
+
+    <section id="view-history" class="view" hidden>
+      <h2>Past shops</h2>
+      <ul id="history" class="history"></ul>
+      <p id="history-empty" class="empty muted" hidden>No completed shops yet.</p>
+    </section>
+
+    <section id="view-household" class="view" hidden>
+      <div class="card">
+        <h2>My account</h2>
+        <form id="password-form" class="stack">
+          <label>Current password <input name="current_password" type="password" required autocomplete="current-password"></label>
+          <label>New password <input name="new_password" type="password" required minlength="8" autocomplete="new-password"></label>
+          <button>Change password</button>
+          <p class="error" role="alert"></p>
+        </form>
+        <button id="logout-btn" class="link">Sign out</button>
+      </div>
+
+      <div id="members-card" class="card" hidden>
+        <h2>Household members</h2>
+        <ul id="members" class="members"></ul>
+        <h3>Add a member</h3>
+        <form id="member-form" class="stack">
+          <label>Name <input name="display_name" required maxlength="40"></label>
+          <label>Username <input name="username" required minlength="2" maxlength="32" pattern="[A-Za-z0-9_.\-]+" autocapitalize="none"></label>
+          <label>Temporary password <input name="password" type="text" required minlength="8" autocomplete="off"></label>
+          <label class="check"><input name="is_admin" type="checkbox"> Can manage members</label>
+          <button class="primary">Add member</button>
+          <p class="error" role="alert"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <nav id="tabs" class="tabs" hidden>
+    <button data-view="list" class="active">List</button>
+    <button data-view="history">History</button>
+    <button data-view="household">Household</button>
+  </nav>
+
+  <dialog id="complete-dialog">
+    <form method="dialog" class="stack">
+      <h2>Finish this shop?</h2>
+      <p class="muted">The list is saved to History and a new one starts.</p>
+      <label class="check"><input id="carry-over" type="checkbox" checked> Move items that weren't bought to the new list</label>
+      <div class="row end">
+        <button value="cancel">Cancel</button>
+        <button value="ok" class="primary">Shop complete</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

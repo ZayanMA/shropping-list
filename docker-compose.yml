@@ -1,0 +1,12 @@
+services:
+  shropping-list:
+    build: .
+    container_name: shropping-list
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/data
+    environment:
+      # Set to "true" once you serve the app over HTTPS (e.g. behind a reverse proxy).
+      SHOPLIST_SECURE_COOKIES: "false"

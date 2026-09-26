@@ -1,0 +1,161 @@
+:root {
+  --bg: #f4f6f3;
+  --card: #ffffff;
+  --text: #1c2420;
+  --muted: #66716b;
+  --line: #dfe4df;
+  --accent: #2f7d4f;
+  --accent-text: #ffffff;
+  --danger: #b3261e;
+  --radius: 12px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121614;
+    --card: #1b211e;
+    --text: #e6ece8;
+    --muted: #9aa69f;
+    --line: #2c3530;
+    --accent: #5dbb83;
+    --accent-text: #0d1f14;
+    --danger: #f2877f;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+main { max-width: 640px; margin: 0 auto; padding: 16px; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  max-width: 640px; margin: 0 auto; padding: 14px 16px 0;
+}
+.topbar h1 { display: flex; align-items: center; gap: 8px; font-size: 1.2rem; margin: 0; }
+.topbar h1 img { width: 26px; height: 26px; }
+
+h2 { font-size: 1.15rem; margin: 0 0 12px; }
+h3 { font-size: 1rem; margin: 20px 0 10px; }
+.muted { color: var(--muted); }
+.small { font-size: .875rem; }
+.error { color: var(--danger); margin: 0; min-height: 0; }
+.error:empty { display: none; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; gap: 8px; align-items: center; }
+.row.end { justify-content: flex-end; }
+
+label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; color: var(--muted); }
+label.check { flex-direction: row; align-items: center; gap: 8px; color: var(--text); }
+
+input, button { font: inherit; color: inherit; }
+input[type=text], input[type=password], input[type=number], input:not([type]) {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  min-height: 44px;
+}
+input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
+
+button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  cursor: pointer;
+}
+button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+button.link { border: 0; background: none; color: var(--accent); padding: 8px 0; margin-top: 8px; }
+button.danger { color: var(--danger); }
+button:disabled { opacity: .5; cursor: default; }
+
+.add-row { display: flex; gap: 8px; padding: 10px; }
+.add-row input[name=name] { flex: 1; min-width: 0; }
+.add-row input[name=quantity] { width: 72px; flex: none; text-align: center; }
+
+.items, .history, .members { list-style: none; margin: 0; padding: 0; }
+
+.item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 8px 8px 12px;
+  margin-bottom: 8px;
+}
+.item .main { flex: 1; min-width: 0; }
+.item .name { font-weight: 600; overflow-wrap: anywhere; }
+.item .meta { font-size: .8rem; color: var(--muted); }
+.item.checked .name { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+.item input[type=checkbox] { width: 24px; height: 24px; flex: none; }
+
+.qty { display: flex; align-items: center; gap: 2px; flex: none; }
+.qty span { min-width: 2ch; text-align: center; font-variant-numeric: tabular-nums; }
+.qty button, .item .remove { min-width: 36px; min-height: 36px; padding: 0; border-color: transparent; background: transparent; }
+.item .remove { color: var(--muted); font-size: 1.2rem; }
+
+.empty { text-align: center; padding: 32px 0; }
+
+.complete-bar {
+  position: sticky; bottom: calc(72px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 12px; margin-top: 16px;
+}
+
+.history li {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  margin-bottom: 8px; overflow: hidden;
+}
+.history summary { padding: 12px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; }
+.history summary::-webkit-details-marker { display: none; }
+.history .sub { font-size: .85rem; color: var(--muted); }
+.history ul { list-style: none; margin: 0; padding: 0 12px 12px; }
+.history ul li { border: 0; border-top: 1px solid var(--line); border-radius: 0; margin: 0; padding: 8px 0; display: flex; justify-content: space-between; gap: 8px; }
+.history .not-bought { color: var(--muted); text-decoration: line-through; }
+
+.members li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.members .badge { font-size: .75rem; padding: 2px 8px; border-radius: 99px; background: var(--bg); color: var(--muted); margin-left: 6px; }
+.members .actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.members .actions button { min-height: 36px; padding: 4px 10px; font-size: .85rem; }
+.members li.inactive .who { opacity: .55; }
+
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: center;
+  background: var(--card); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tabs button { flex: 1; max-width: 213px; border: 0; border-radius: 0; background: none; min-height: 60px; color: var(--muted); }
+.tabs button.active { color: var(--accent); font-weight: 600; box-shadow: inset 0 3px 0 var(--accent); }
+
+dialog {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--card); color: var(--text);
+  width: min(420px, calc(100vw - 32px)); padding: 20px;
+}
+dialog::backdrop { background: rgb(0 0 0 / .4); }
+dialog h2 { margin: 0; }
+dialog p { margin: 0; }
